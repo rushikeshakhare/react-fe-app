@@ -1,0 +1,31 @@
+.user-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 150ms;
+}
+
+.user-card:hover {
+    box-shadow: 2px 2px 5px white;
+    transform: scale(1.02);
+}
+
+.user-card-image {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    margin: auto;
+
+}
+
+.user-card-image img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.user-card-name {
+    color: #282c34;
+    text-align: center;
+    margin-top: 10px;
+}

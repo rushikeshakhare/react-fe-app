@@ -1,0 +1,27 @@
+.candidate-details-title {
+    margin-top: 30px;
+}
+
+.candidate-details-info {
+    display: flex;
+    margin-top: 20px;
+}
+
+.candidate-details-info-data {
+    padding: 0px 20px;
+}
+
+.candidate-details-info-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+}
+
+.candidate-details-info-data {
+    margin-left: 30px;
+}
+
+.mar-l-10 {
+    margin-left: 10px;
+
+}

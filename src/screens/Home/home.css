@@ -1,0 +1,24 @@
+.home-screen-search {
+    margin-top: 25px;
+    display: flex;
+}
+
+.home-screen-actions {
+    flex: 1;
+    text-align: right;
+}
+
+.input-control {
+    padding: 10px;
+    width: 30%;
+    color: #282c34;
+    border-radius: 5px;
+    border: none;
+}
+
+.home-screen-content {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
