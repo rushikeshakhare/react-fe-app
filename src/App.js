@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState, useEffect } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import {
   Home,
@@ -20,7 +20,11 @@ const initialState = {
 const appReducer = (state, action) => {
   switch (action.type) {
     case "FETCH_CANDIDATES": {
-      return { ...state, loading: true, candidates: [] };
+      return {
+        ...state,
+        loading: true,
+        candidates: [],
+      };
     }
     case "FETCH_CANDIDATES_SUCCESS": {
       const modCandidates = action.response.map((candidate) => ({
@@ -36,10 +40,18 @@ const appReducer = (state, action) => {
       };
     }
     case "FETCH_CANDIDATES_ERROR": {
-      return { ...state, loading: false, error: action.error };
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
     }
     case "SEARCH_CANDIDATES_BY_QUERY": {
-      return { ...state, loading: false, candidates: action.response };
+      return {
+        ...state,
+        loading: false,
+        candidates: action.response,
+      };
     }
     case "UPDATE_CANDIDATES": {
       return {
@@ -62,15 +74,25 @@ function App() {
   );
 
   useEffect(() => {
-    dispatch({ type: "FETCH_CANDIDATES" });
+    dispatch({
+      type: "FETCH_CANDIDATES",
+    });
     fetch(
       "https://s3-ap-southeast-1.amazonaws.com/he-public-data/users49b8675.json"
     )
       .then((response) => response.json())
       .then((response) =>
-        dispatch({ type: "FETCH_CANDIDATES_SUCCESS", response })
+        dispatch({
+          type: "FETCH_CANDIDATES_SUCCESS",
+          response,
+        })
       )
-      .catch((error) => dispatch({ type: "FETCH_CANDIDATES_ERROR", error }));
+      .catch((error) =>
+        dispatch({
+          type: "FETCH_CANDIDATES_ERROR",
+          error,
+        })
+      );
   }, []);
 
   const searchCandidatesByQuery = (searchQuery) => {
@@ -90,19 +112,31 @@ function App() {
   const toggleShortlistCandidate = (id) => {
     const modifiedCandidates = allCandidates.map((candidate) => {
       if (candidate.id === id)
-        return { ...candidate, shortlisted: !candidate.shortlisted };
+        return {
+          ...candidate,
+          shortlisted: !candidate.shortlisted,
+        };
       else return candidate;
     });
-    dispatch({ type: "UPDATE_CANDIDATES", response: modifiedCandidates });
+    dispatch({
+      type: "UPDATE_CANDIDATES",
+      response: modifiedCandidates,
+    });
   };
 
   const toggleRejectCandidate = (id) => {
     const modifiedCandidates = allCandidates.map((candidate) => {
       if (candidate.id === id)
-        return { ...candidate, rejected: !candidate.rejected };
+        return {
+          ...candidate,
+          rejected: !candidate.rejected,
+        };
       else return candidate;
     });
-    dispatch({ type: "UPDATE_CANDIDATES", response: modifiedCandidates });
+    dispatch({
+      type: "UPDATE_CANDIDATES",
+      response: modifiedCandidates,
+    });
   };
 
   return (
@@ -119,21 +153,21 @@ function App() {
         }}
       >
         <div className="App-title">
-          <h1>HERE JOBS</h1>
-        </div>
+          <h1> HERE JOBS </h1>{" "}
+        </div>{" "}
         <HashRouter>
           <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/" exact component={Home} />{" "}
             <Route
               path="/shortlisted"
               exact
               component={CandidateListShortlisted}
-            />
-            <Route path="/rejected" exact component={CandidateListRejected} />
-            <Route path="/:id" exact component={CandidateDetails} />
-          </Switch>
-        </HashRouter>
-      </AppContext.Provider>
+            />{" "}
+            <Route path="/rejected" exact component={CandidateListRejected} />{" "}
+            <Route path="/:id" exact component={CandidateDetails} />{" "}
+          </Switch>{" "}
+        </HashRouter>{" "}
+      </AppContext.Provider>{" "}
     </div>
   );
 }
