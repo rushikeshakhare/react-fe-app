@@ -1,71 +1,25 @@
 import React, { createContext, useReducer, useEffect } from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import {
+  FETCH_CANDIDATES,
+  FETCH_CANDIDATES_SUCCESS,
+  FETCH_CANDIDATES_ERROR,
+  SEARCH_CANDIDATES_BY_QUERY,
+  UPDATE_CANDIDATES,
+} from "./types";
+import {
   Home,
   CandidateDetails,
   CandidateListRejected,
   CandidateListShortlisted,
 } from "./screens";
+import { appReducer, initialState } from "./reducer";
 import "./App.css";
 
+const API_URL =
+  "https://s3-ap-southeast-1.amazonaws.com/he-public-data/users49b8675.json";
+
 export const AppContext = createContext();
-
-const initialState = {
-  loading: false,
-  candidates: [],
-  error: null,
-  allCandidates: [],
-};
-
-const appReducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_CANDIDATES": {
-      return {
-        ...state,
-        loading: true,
-        candidates: [],
-      };
-    }
-    case "FETCH_CANDIDATES_SUCCESS": {
-      const modCandidates = action.response.map((candidate) => ({
-        ...candidate,
-        shortlisted: false,
-        rejected: false,
-      }));
-      return {
-        ...state,
-        loading: false,
-        candidates: modCandidates,
-        allCandidates: modCandidates,
-      };
-    }
-    case "FETCH_CANDIDATES_ERROR": {
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
-      };
-    }
-    case "SEARCH_CANDIDATES_BY_QUERY": {
-      return {
-        ...state,
-        loading: false,
-        candidates: action.response,
-      };
-    }
-    case "UPDATE_CANDIDATES": {
-      return {
-        ...state,
-        loading: false,
-        candidates: action.response,
-        allCandidates: action.response,
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
 
 function App() {
   const [{ candidates, allCandidates, loading }, dispatch] = useReducer(
@@ -75,21 +29,19 @@ function App() {
 
   useEffect(() => {
     dispatch({
-      type: "FETCH_CANDIDATES",
+      type: FETCH_CANDIDATES,
     });
-    fetch(
-      "https://s3-ap-southeast-1.amazonaws.com/he-public-data/users49b8675.json"
-    )
+    fetch(API_URL)
       .then((response) => response.json())
       .then((response) =>
         dispatch({
-          type: "FETCH_CANDIDATES_SUCCESS",
+          type: FETCH_CANDIDATES_SUCCESS,
           response,
         })
       )
       .catch((error) =>
         dispatch({
-          type: "FETCH_CANDIDATES_ERROR",
+          type: FETCH_CANDIDATES_ERROR,
           error,
         })
       );
@@ -100,7 +52,7 @@ function App() {
       candidate.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     dispatch({
-      type: "SEARCH_CANDIDATES_BY_QUERY",
+      type: SEARCH_CANDIDATES_BY_QUERY,
       response: filteredCandidates,
     });
   };
@@ -115,11 +67,12 @@ function App() {
         return {
           ...candidate,
           shortlisted: !candidate.shortlisted,
+          rejected: false,
         };
       else return candidate;
     });
     dispatch({
-      type: "UPDATE_CANDIDATES",
+      type: UPDATE_CANDIDATES,
       response: modifiedCandidates,
     });
   };
@@ -130,11 +83,12 @@ function App() {
         return {
           ...candidate,
           rejected: !candidate.rejected,
+          shortlisted: false,
         };
       else return candidate;
     });
     dispatch({
-      type: "UPDATE_CANDIDATES",
+      type: UPDATE_CANDIDATES,
       response: modifiedCandidates,
     });
   };
@@ -153,21 +107,21 @@ function App() {
         }}
       >
         <div className="App-title">
-          <h1> HERE JOBS </h1>{" "}
-        </div>{" "}
+          <h1> HERE JOBS </h1>
+        </div>
         <HashRouter>
           <Switch>
-            <Route path="/" exact component={Home} />{" "}
+            <Route path="/" exact component={Home} />
             <Route
               path="/shortlisted"
               exact
               component={CandidateListShortlisted}
-            />{" "}
-            <Route path="/rejected" exact component={CandidateListRejected} />{" "}
-            <Route path="/:id" exact component={CandidateDetails} />{" "}
-          </Switch>{" "}
-        </HashRouter>{" "}
-      </AppContext.Provider>{" "}
+            />
+            <Route path="/rejected" exact component={CandidateListRejected} />
+            <Route path="/:id" exact component={CandidateDetails} />
+          </Switch>
+        </HashRouter>
+      </AppContext.Provider>
     </div>
   );
 }

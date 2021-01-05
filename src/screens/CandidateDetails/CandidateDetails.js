@@ -12,11 +12,11 @@ export const CandidateDetails = ({ match, history }) => {
         toggleRejectCandidate,
       }) =>
         loading ? (
-          <>Loading...</>
+          <> Loading... </>
         ) : (
           <div className="candidate-details">
             <div className="candidate-details-title">
-              <h1>Candidate Details</h1>
+              <h1> Candidate Details </h1>
             </div>
             <div className="candidate-details-info">
               <div className="candidate-details-info-image">
@@ -25,12 +25,12 @@ export const CandidateDetails = ({ match, history }) => {
                     getCandidateData(match.params.id) &&
                     getCandidateData(match.params.id).Image
                   }
-                  alt="Candidate Image"
+                  alt="Candidate"
                 />
               </div>
               <div className="candidate-details-info-data">
                 <h2>
-                  Name :{" "}
+                  Name:{" "}
                   {getCandidateData(match.params.id) &&
                     getCandidateData(match.params.id).name}
                 </h2>
